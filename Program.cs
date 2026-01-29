@@ -12,8 +12,7 @@ namespace WindowsAss
     {
         static void Main(string[] args)
         {
-            // WindowsAss.src.Homework.ShapeRunner.Run();
-            WindowsAss.src.Onclass.ArrayProcessor.Run();
+            ShapeRunner.Run();
         }
     }
 }

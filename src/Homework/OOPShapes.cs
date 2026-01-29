@@ -2,7 +2,6 @@ using System;
 
 namespace WindowsAss.src.Homework
 {
-    // Lớp trừu tượng TuGiac
     public abstract class TuGiac
     {
         protected double ChieuDai { get; set; }
@@ -19,7 +18,6 @@ namespace WindowsAss.src.Homework
         }
     }
 
-    // Lớp HinhCN kế thừa từ TuGiac
     public class HinhCN : TuGiac
     {
         public void Nhap()
@@ -28,7 +26,6 @@ namespace WindowsAss.src.Homework
             while (true)
             {
                 Console.Write("Nhap chieu dai: ");
-                // Su dung TryParse de kiem tra dau vao an toan
                 if (double.TryParse(Console.ReadLine(), out dai) && dai > 0)
                 {
                     this.ChieuDai = dai;
@@ -61,7 +58,6 @@ namespace WindowsAss.src.Homework
         }
     }
 
-    // Lớp HinhVuong kế thừa từ TuGiac
     public class HinhVuong : TuGiac
     {
         public void Nhap()
@@ -91,7 +87,6 @@ namespace WindowsAss.src.Homework
         }
     }
 
-    // Lớp để chạy ví dụ
     public class ShapeRunner
     {
         public static void Run()
