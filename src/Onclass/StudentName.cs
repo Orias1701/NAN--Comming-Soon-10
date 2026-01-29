@@ -26,14 +26,32 @@ namespace WindowsAss.src.Onclass
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.InputEncoding = System.Text.Encoding.UTF8;
 
-            Console.Write("Nhập số sinh viên: ");
-            if (!int.TryParse(Console.ReadLine(), out int n)) return;
+            int n;
+            while (true)
+            {
+                Console.Write("Nhập số sinh viên: ");
+                if (int.TryParse(Console.ReadLine(), out n) && n > 0)
+                {
+                    break;
+                }
+                Console.WriteLine("So luong khong hop le. Vui long nhap mot so nguyen duong.");
+            }
 
             List<string> danhSach = new List<string>();
             for (int i = 0; i < n; i++)
             {
-                Console.Write($"Sinh viên {i + 1}: ");
-                danhSach.Add(Console.ReadLine().Trim());
+                string? name;
+                while (true)
+                {
+                    Console.Write($"Sinh viên {i + 1}: ");
+                    name = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(name))
+                    {
+                        danhSach.Add(name.Trim());
+                        break;
+                    }
+                    Console.WriteLine("Ten khong duoc de trong. Vui long nhap lai.");
+                }
             }
 
             var danhSachSapXep = danhSach.OrderBy(fullName => GetName(fullName))
@@ -49,21 +67,32 @@ namespace WindowsAss.src.Onclass
             while (true)
             {
                 Console.Write("\nTìm kiếm (Nhập \"Exit\" để thoát): ");
-                string target = Console.ReadLine().Trim();
-                if (target == "Exit")
+                string? target = Console.ReadLine();
+
+                if (string.Equals(target, "Exit", StringComparison.OrdinalIgnoreCase))
                 {
                     Console.WriteLine("Đã thoát");
                     break;
                 }
 
-                int index = danhSachSapXep.IndexOf(target);
+                if (string.IsNullOrWhiteSpace(target))
+                {
+                    Console.WriteLine("Ten tim kiem khong duoc de trong.");
+                    continue;
+                }
+                
+                string? foundStudent = danhSachSapXep.FirstOrDefault(s => s.Equals(target.Trim(), StringComparison.OrdinalIgnoreCase));
 
-                if (index != -1)
-                    Console.WriteLine($"Vị trí: {index + 1}");
+                if (foundStudent != null)
+                {
+                    int index = danhSachSapXep.IndexOf(foundStudent);
+                    Console.WriteLine($"Tim thay '{foundStudent}' tai vi tri: {index + 1}");
+                }
                 else
+                {
                     Console.WriteLine("Not Found");
+                }
             }
-
         }
     }
 }

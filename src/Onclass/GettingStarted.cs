@@ -33,21 +33,38 @@ namespace WindowsAss.src.Onclass
         public static void Run()
         {
             int a, b, c, d;
-            Console.Write("\na = ");
-            a = int.Parse(Console.ReadLine());
-            Console.Write("\nb = ");
-            b = int.Parse(Console.ReadLine());
-            Console.Write("\nc = ");
-            c = int.Parse(Console.ReadLine());
-            Console.Write("\nd = ");
-            d = int.Parse(Console.ReadLine());
-            if (b == 0 || d == 0)
-            {
-                Console.WriteLine("b & d != 0!");
-                return;
-            }
+
+            a = ReadInteger("a");
+            b = ReadInteger("b", nonZero: true);
+            c = ReadInteger("c");
+d = ReadInteger("d", nonZero: true);
+
             GettingStarted pr = new GettingStarted();
             pr.PrintPS(a, b, c, d);
+        }
+
+        private static int ReadInteger(string variableName, bool nonZero = false)
+        {
+            int value;
+            while (true)
+            {
+                Console.Write($"\nNhap {variableName} = ");
+                if (int.TryParse(Console.ReadLine(), out value))
+                {
+                    if (nonZero && value == 0)
+                    {
+                        Console.WriteLine("Gia tri nay phai khac 0. Vui long nhap lai.");
+                    }
+                    else
+                    {
+                        return value;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Gia tri khong hop le. Vui long nhap mot so nguyen.");
+                }
+            }
         }
     }
 }

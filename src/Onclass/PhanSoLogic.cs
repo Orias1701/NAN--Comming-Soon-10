@@ -70,11 +70,30 @@ namespace WindowsAss.src.Onclass
 
         private static PhanSoLogic Nhap()
         {
-            Console.Write("Nhập tử số: ");
-            int t = int.Parse(Console.ReadLine());
-            Console.Write("Nhập mẫu số: ");
-            int m = int.Parse(Console.ReadLine());
-            return new PhanSoLogic(t, m);
+            int tu;
+            while (true)
+            {
+                Console.Write("Nhập tử số: ");
+                if (int.TryParse(Console.ReadLine(), out tu))
+                {
+                    break;
+                }
+                Console.WriteLine("Giá trị không hợp lệ. Vui lòng nhập một số nguyên.");
+            }
+
+            int mau;
+            while (true)
+            {
+                Console.Write("Nhập mẫu số: ");
+                if (int.TryParse(Console.ReadLine(), out mau) && mau != 0)
+                {
+                    break;
+                }
+                Console.WriteLine("Giá trị không hợp lệ. Mẫu số phải là một số nguyên khác 0.");
+            }
+            return new PhanSoLogic(tu, mau);
         }
+
+
     }
 }
