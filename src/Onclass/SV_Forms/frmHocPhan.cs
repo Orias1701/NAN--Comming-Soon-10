@@ -7,9 +7,12 @@ using Microsoft.Data.Sqlite;
 
 namespace WindowsAss.src.Onclass.SV_Forms
 {
-    /// <summary>Form con: SQLite cs_assignment.db</summary>
+    /// <summary>Form con: SQLite cs_assignment.db. Xóa mềm dùng cột Status (0 = Active, 1 = Deleted).</summary>
     public class frmHocPhan : Form
     {
+        private const int StatusActive = 0;
+        private const int StatusDeleted = 1;
+
         private static string ConnectionString => "Data Source=" + Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cs_assignment.db");
         private Dictionary<string, Control> _inputs = null!;
         private ListView _lv = null!;
@@ -88,7 +91,7 @@ namespace WindowsAss.src.Onclass.SV_Forms
             using var conn = new SqliteConnection(ConnectionString);
             conn.Open();
             using var cmd = new SqliteCommand(
-                "CREATE TABLE IF NOT EXISTS HocPhan (MaHP TEXT PRIMARY KEY, TenHP TEXT, SoDVHT INTEGER, isDelete INTEGER)", conn);
+                "CREATE TABLE IF NOT EXISTS HocPhan (MaHP TEXT PRIMARY KEY, TenHP TEXT, SoDVHT INTEGER, Status INTEGER DEFAULT 0)", conn);
             cmd.ExecuteNonQuery();
         }
 
@@ -100,8 +103,9 @@ namespace WindowsAss.src.Onclass.SV_Forms
                 using var conn = new SqliteConnection(ConnectionString);
                 conn.Open();
                 using var cmd = new SqliteCommand(
-                    "SELECT MaHP, TenHP, SoDVHT FROM HocPhan WHERE (isDelete = 0 OR isDelete IS NULL) ORDER BY MaHP",
+                    "SELECT MaHP, TenHP, SoDVHT FROM HocPhan WHERE (Status = @Active OR Status IS NULL) ORDER BY MaHP",
                     conn);
+                cmd.Parameters.AddWithValue("@Active", StatusActive);
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -135,11 +139,12 @@ namespace WindowsAss.src.Onclass.SV_Forms
                 using var conn = new SqliteConnection(ConnectionString);
                 conn.Open();
                 using var cmd = new SqliteCommand(
-                    "INSERT INTO HocPhan (MaHP, TenHP, SoDVHT, isDelete) VALUES (@MaHP, @TenHP, @SoDVHT, 0)",
+                    "INSERT INTO HocPhan (MaHP, TenHP, SoDVHT, Status) VALUES (@MaHP, @TenHP, @SoDVHT, @Status)",
                     conn);
                 cmd.Parameters.AddWithValue("@MaHP", ma);
                 cmd.Parameters.AddWithValue("@TenHP", string.IsNullOrEmpty(ten) ? DBNull.Value : ten);
                 cmd.Parameters.AddWithValue("@SoDVHT", dvht);
+                cmd.Parameters.AddWithValue("@Status", StatusActive);
                 cmd.ExecuteNonQuery();
                 LoadHocPhanToListView();
                 FormFieldHelper.ClearInputs(_inputs);
@@ -197,14 +202,15 @@ namespace WindowsAss.src.Onclass.SV_Forms
                 using var conn = new SqliteConnection(ConnectionString);
                 conn.Open();
                 using var cmd = new SqliteCommand(
-                    "UPDATE HocPhan SET isDelete = 1 WHERE MaHP = @MaHP",
+                    "UPDATE HocPhan SET Status = @Status WHERE MaHP = @MaHP",
                     conn);
                 cmd.Parameters.AddWithValue("@MaHP", ma);
+                cmd.Parameters.AddWithValue("@Status", StatusDeleted);
                 cmd.ExecuteNonQuery();
                 LoadHocPhanToListView();
                 FormFieldHelper.ClearInputs(_inputs);
                 SetMaHPReadOnly(false);
-                MessageBox.Show("Đã xóa (ẩn) học phần.");
+                MessageBox.Show("Đã xóa học phần.");
             }
             catch (SqliteException ex) { MessageBox.Show("Lỗi: " + ex.Message); }
         }
