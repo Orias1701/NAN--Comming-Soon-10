@@ -74,7 +74,7 @@ namespace WindowsAss.src.Onclass
             while (true)
             {
                 Console.Write("Nhập tử số: ");
-                if (int.TryParse(Console.ReadLine(), out tu))
+                if (int.TryParse(Console.ReadLine() ?? "", out tu))
                 {
                     break;
                 }
@@ -85,7 +85,7 @@ namespace WindowsAss.src.Onclass
             while (true)
             {
                 Console.Write("Nhập mẫu số: ");
-                if (int.TryParse(Console.ReadLine(), out mau) && mau != 0)
+                if (int.TryParse(Console.ReadLine() ?? "", out mau) && mau != 0)
                 {
                     break;
                 }

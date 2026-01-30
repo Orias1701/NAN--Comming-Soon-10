@@ -30,7 +30,7 @@ namespace WindowsAss.src.Onclass
             while (true)
             {
                 Console.Write("Nhập số sinh viên: ");
-                if (int.TryParse(Console.ReadLine(), out n) && n > 0)
+                if (int.TryParse(Console.ReadLine() ?? "", out n) && n > 0)
                 {
                     break;
                 }
@@ -47,7 +47,7 @@ namespace WindowsAss.src.Onclass
                     name = Console.ReadLine();
                     if (!string.IsNullOrWhiteSpace(name))
                     {
-                        danhSach.Add(name.Trim());
+                        danhSach.Add(name!.Trim());
                         break;
                     }
                     Console.WriteLine("Ten khong duoc de trong. Vui long nhap lai.");
@@ -81,7 +81,7 @@ namespace WindowsAss.src.Onclass
                     continue;
                 }
                 
-                string? foundStudent = danhSachSapXep.FirstOrDefault(s => s.Equals(target.Trim(), StringComparison.OrdinalIgnoreCase));
+                string? foundStudent = danhSachSapXep.FirstOrDefault(s => s.Equals(target!.Trim(), StringComparison.OrdinalIgnoreCase));
 
                 if (foundStudent != null)
                 {

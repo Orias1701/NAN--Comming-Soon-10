@@ -14,7 +14,7 @@ namespace WindowsAss.src.Onclass
                     while (true)
                     {
                         Console.Write("\nNhap so luong phan tu cua mang: ");
-                        if (int.TryParse(Console.ReadLine(), out n) && n > 0)
+                        if (int.TryParse(Console.ReadLine() ?? "", out n) && n > 0)
                         {
                             break;
                         }
@@ -28,7 +28,7 @@ namespace WindowsAss.src.Onclass
                         while (true)
                         {
                             Console.Write($"arr[{i}] = ");
-                            if (int.TryParse(Console.ReadLine(), out tempValue))
+                            if (int.TryParse(Console.ReadLine() ?? "", out tempValue))
                             {
                                 arr[i] = tempValue;
                                 break;

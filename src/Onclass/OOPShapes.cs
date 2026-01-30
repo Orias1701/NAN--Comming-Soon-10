@@ -91,15 +91,40 @@ namespace WindowsAss.src.Homework
     {
         public static void Run()
         {
-            Console.WriteLine("\n--- Hinh Chu Nhat (Rectangle) ---");
-            HinhCN hcn = new HinhCN();
-            hcn.Nhap();
-            hcn.display();
+            while (true)
+            {
+                Console.WriteLine("\n=== May tinh hinh hoc ===");
+                Console.WriteLine("Chon loai hinh ban muon tinh:");
+                Console.WriteLine("  0: Hinh Chu Nhat");
+                Console.WriteLine("  1: Hinh Vuong");
+                Console.WriteLine("  Else: Thoat");
+                Console.Write("Lua chon cua ban: ");
 
-            Console.WriteLine("\n--- Hinh Vuong (Square) ---");
-            HinhVuong hv = new HinhVuong();
-            hv.Nhap();
-            hv.display();
+                if (!int.TryParse(Console.ReadLine(), out int type))
+                {
+                    Console.WriteLine("==> Thoat chuong trinh.");
+                    break;
+                }
+                if (type == 0)
+                {
+                    Console.WriteLine("\n--- Hinh Chu Nhat ---");
+                    HinhCN hcn = new HinhCN();
+                    hcn.Nhap();
+                    hcn.display();
+                }
+                else if (type == 1)
+                {
+                    Console.WriteLine("\n--- Hinh Vuong ---");
+                    HinhVuong hv = new HinhVuong();
+                    hv.Nhap();
+                    hv.display();
+                }
+                else
+                {
+                    Console.WriteLine("==> Thoat chuong trinh.");
+                    break;
+                }
+            }
         }
     }
 }
