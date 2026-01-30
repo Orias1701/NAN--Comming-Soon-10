@@ -43,6 +43,7 @@ namespace WindowsAss.src.Onclass.SV_Forms
             AddButton("Sinh viên", "Nhập thông tin SV", ShowFrmSinhVien);
             AddButton("Khoa", "Nhập khoa", ShowFrmKhoa);
             AddButton("Môn học", "Nhập môn học", ShowFrmMonHoc);
+            AddButton("Học phần", "Thông tin học phần (DB QuanLyHocPhan)", ShowFrmHocPhan);
             AddButton("Nhập điểm", "Nhập điểm cho SV", ShowFrmNhapDiem);
             AddButton("Xem điểm", "Tra cứu điểm", ShowFrmXemDiem);
             AddButton("Thống kê Khoa", "Tra cứu SV theo khoa", ShowFrmThongKe);
@@ -73,6 +74,7 @@ namespace WindowsAss.src.Onclass.SV_Forms
         private void ShowFrmSinhVien(object? sender, EventArgs e) => ShowChild(new frmSinhVien());
         private void ShowFrmKhoa(object? sender, EventArgs e) => ShowChild(new frmKhoa());
         private void ShowFrmMonHoc(object? sender, EventArgs e) => ShowChild(new frmMonHoc());
+        private void ShowFrmHocPhan(object? sender, EventArgs e) => ShowChild(new frmHocPhan());
         private void ShowFrmNhapDiem(object? sender, EventArgs e) => ShowChild(new frmNhapDiem());
         private void ShowFrmXemDiem(object? sender, EventArgs e) => ShowChild(new frmXemDiem());
         private void ShowFrmThongKe(object? sender, EventArgs e) => ShowChild(new frmThongKe());
