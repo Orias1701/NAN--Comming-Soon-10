@@ -9,7 +9,16 @@ namespace WindowsAss.src.Onclass
     {
         public static void Run()
         {
-            Application.Run(new WindowsMediaPlayerForm());
+            try
+            {
+                Application.Run(new WindowsMediaPlayerForm());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Lỗi Windows Media Player");
+            }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 
@@ -420,10 +429,24 @@ namespace WindowsAss.src.Onclass
         {
             _clockTimer?.Stop();
             _clockTimer?.Dispose();
+            _clockTimer = null!;
             _titleScrollTimer?.Stop();
             _titleScrollTimer?.Dispose();
+            _titleScrollTimer = null!;
             _progressTimer?.Stop();
             _progressTimer?.Dispose();
+            _progressTimer = null!;
+            if (_mediaPlayer != null)
+            {
+                try
+                {
+                    _mediaPlayer.PlayStateChange -= MediaPlayer_PlayStateChange;
+                    _mediaPlayer.Ctlcontrols.stop();
+                    _mediaPlayer.URL = "";
+                }
+                catch { /* ignore */ }
+                _mediaPlayer = null;
+            }
             base.OnFormClosing(e);
         }
     }
