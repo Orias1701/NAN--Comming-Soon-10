@@ -59,12 +59,22 @@ namespace WindowsAss.src.Onclass.SV_Forms
             this.ClientSize = new Size(FormFieldHelper.DefaultListViewX + listViewWidth + marginRight, listY + listViewHeight + marginBottom);
             _lv.SelectedIndexChanged += (s, e) =>
             {
-                if (_lv.SelectedItems.Count == 0) return;
+                if (_lv.SelectedItems.Count == 0)
+                {
+                    SetMaHPReadOnly(false);
+                    return;
+                }
                 var li = _lv.SelectedItems[0];
                 FormFieldHelper.SetText(_inputs["MaHP"], li.Text);
                 FormFieldHelper.SetText(_inputs["TenHP"], li.SubItems.Count > 1 ? li.SubItems[1].Text : "");
                 FormFieldHelper.SetText(_inputs["SoDVHT"], li.SubItems.Count > 2 ? li.SubItems[2].Text : "");
+                SetMaHPReadOnly(true);
             };
+        }
+
+        private void SetMaHPReadOnly(bool readOnly)
+        {
+            if (_inputs["MaHP"] is TextBox tb) tb.ReadOnly = readOnly;
         }
 
         private void FrmHocPhan_Load(object? sender, EventArgs e)
@@ -114,6 +124,12 @@ namespace WindowsAss.src.Onclass.SV_Forms
             if (string.IsNullOrWhiteSpace(ma)) { MessageBox.Show("Nhập mã học phần."); return; }
             if (!int.TryParse(FormFieldHelper.GetInputText(_inputs, "SoDVHT"), out int dvht) || dvht < 0) { MessageBox.Show("Số ĐVHT không hợp lệ."); return; }
 
+            if (MaHPExists(ma))
+            {
+                MessageBox.Show("Mã học phần đã tồn tại.");
+                return;
+            }
+
             try
             {
                 using var conn = new SqliteConnection(ConnectionString);
@@ -127,6 +143,7 @@ namespace WindowsAss.src.Onclass.SV_Forms
                 cmd.ExecuteNonQuery();
                 LoadHocPhanToListView();
                 FormFieldHelper.ClearInputs(_inputs);
+                SetMaHPReadOnly(false);
                 MessageBox.Show("Đã thêm học phần.");
             }
             catch (SqliteException ex)
@@ -134,6 +151,16 @@ namespace WindowsAss.src.Onclass.SV_Forms
                 if ((int)ex.SqliteErrorCode == 19) MessageBox.Show("Mã học phần đã tồn tại.");
                 else MessageBox.Show("Lỗi: " + ex.Message);
             }
+        }
+
+        private static bool MaHPExists(string maHP)
+        {
+            using var conn = new SqliteConnection(ConnectionString);
+            conn.Open();
+            using var cmd = new SqliteCommand("SELECT 1 FROM HocPhan WHERE MaHP = @MaHP", conn);
+            cmd.Parameters.AddWithValue("@MaHP", maHP);
+            using var reader = cmd.ExecuteReader();
+            return reader.Read();
         }
 
         private void BtnSua_Click(object? sender, EventArgs e)
@@ -176,6 +203,7 @@ namespace WindowsAss.src.Onclass.SV_Forms
                 cmd.ExecuteNonQuery();
                 LoadHocPhanToListView();
                 FormFieldHelper.ClearInputs(_inputs);
+                SetMaHPReadOnly(false);
                 MessageBox.Show("Đã xóa (ẩn) học phần.");
             }
             catch (SqliteException ex) { MessageBox.Show("Lỗi: " + ex.Message); }
