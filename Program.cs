@@ -14,6 +14,9 @@ namespace WindowsAss
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
             while (true)
             {
                 Console.WriteLine("\n========= CHON CHUONG TRINH DE CHAY =========");
@@ -23,6 +26,7 @@ namespace WindowsAss
                 Console.WriteLine("4. Student Name Sorter (Sap xep ten)");
                 Console.WriteLine("5. OOP Shapes (Tinh chu vi, dien tich)");
                 Console.WriteLine("6. Library Manager (Quan ly thu vien)");
+                Console.WriteLine("7. Quadratic Equation (Phuong trinh bac 2)");
                 Console.WriteLine("0. Thoat");
                 Console.WriteLine("=============================================");
                 Console.Write("Lua chon cua ban: ");
@@ -49,6 +53,9 @@ namespace WindowsAss
                         break;
                     case "6":
                         ConsoleUI.Run();
+                        break;
+                    case "7":
+                        QuadraticEquation.Run();
                         break;
                     case "0":
                         Console.WriteLine("Da thoat chuong trinh chinh.");

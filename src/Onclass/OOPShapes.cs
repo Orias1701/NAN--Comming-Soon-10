@@ -1,6 +1,6 @@
 using System;
 
-namespace WindowsAss.src.Homework
+namespace WindowsAss.src.Onclass
 {
     public abstract class TuGiac
     {
