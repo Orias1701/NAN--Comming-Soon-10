@@ -8,6 +8,7 @@ using System.Windows.Forms; // Thêm dòng này
 using WindowsAss.src.Onclass;
 using WindowsAss.src.Homework;
 using WindowsAss.src.Miniproject.UI;
+using WindowsAss.src.SV_Forms;
 
 namespace WindowsAss
 {
@@ -34,6 +35,7 @@ namespace WindowsAss
                 Console.WriteLine("8. Quan Ly Sinh Vien (Windows Form)");
                 Console.WriteLine("9. Quan Ly Nhan Vien (Windows Form)");
                 Console.WriteLine("10. Windows Media Player (Phat nhac/video)");
+                Console.WriteLine("11. Quan Ly Sinh Vien MDI (SV_Forms)");
                 Console.WriteLine("0. Thoat");
                 Console.WriteLine("=============================================");
                 Console.Write("Lua chon cua ban: ");
@@ -72,6 +74,9 @@ namespace WindowsAss
                         break;
                     case "10":
                         WindowsMediaRunner.Run();
+                        break;
+                    case "11":
+                        SV_FormsRunner.Run();
                         break;
                     case "0":
                         Console.WriteLine("Da thoat chuong trinh chinh.");

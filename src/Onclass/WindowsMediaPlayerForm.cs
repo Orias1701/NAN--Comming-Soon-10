@@ -5,6 +5,7 @@ using AxWMPLib;
 
 namespace WindowsAss.src.Onclass
 {
+    /// <summary>Điểm vào: chạy form Media Player từ menu chính (mục 10).</summary>
     public static class WindowsMediaRunner
     {
         public static void Run()
@@ -17,13 +18,16 @@ namespace WindowsAss.src.Onclass
             {
                 MessageBox.Show(ex.ToString(), "Lỗi Windows Media Player");
             }
+            // Ép thu gom rác để giải phóng COM, tránh lỗi khi mở lại form lần 2
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
     }
 
+    /// <summary>Form trình phát nhạc/video: WMP control, thanh tiến trình, menu File, StatusStrip, phím tắt.</summary>
     public class WindowsMediaPlayerForm : Form
     {
+        // --- Control chính ---
         private AxWindowsMediaPlayer? _mediaPlayer;
         private MenuStrip _menuStrip = null!;
         private StatusStrip _statusStrip = null!;
@@ -32,13 +36,16 @@ namespace WindowsAss.src.Onclass
         private Button _btnOpen = null!, _btnBack5 = null!, _btnPlayPause = null!, _btnForward5 = null!;
         private TrackBar _trackBar = null!;
         private Label _lblTime = null!;
+        // --- Timer: đồng hồ 1s, scroll tiêu đề 200ms, cập nhật thanh tiến trình 500ms ---
         private System.Windows.Forms.Timer _clockTimer = null!;
         private System.Windows.Forms.Timer _titleScrollTimer = null!;
         private System.Windows.Forms.Timer _progressTimer = null!;
+        /// <summary>True khi user đang kéo/click thanh tiến trình → Timer không ghi đè Value.</summary>
         private bool _userSeeking;
         private const string TitleText = "    CHÀO MỪNG CÁC BẠN ĐẾN VỚI CHƯƠNG TRÌNH WINDOWS MEDIA    ";
         private string _currentTitle = TitleText;
-
+        
+        /// <summary>Bộ lọc OpenFileDialog: MP4, MPEG, AVI, WAV, MIDI.</summary>
         private const string MediaFilter = "Media files (MP4, MPEG, AVI, WAV, MIDI)|*.mp4;*.m4v;*.mpeg;*.mpg;*.avi;*.wav;*.mid;*.midi|MP4 (*.mp4;*.m4v)|*.mp4;*.m4v|MPEG (*.mpeg;*.mpg)|*.mpeg;*.mpg|AVI (*.avi)|*.avi|WAV (*.wav)|*.wav|MIDI (*.mid;*.midi)|*.mid;*.midi|All files (*.*)|*.*";
 
         public WindowsMediaPlayerForm()
@@ -46,8 +53,10 @@ namespace WindowsAss.src.Onclass
             InitializeComponent();
         }
 
+        /// <summary>Khởi tạo toàn bộ giao diện: Form, Menu, Panel điều khiển, TrackBar, StatusStrip, WMP, Timer.</summary>
         private void InitializeComponent()
         {
+            // ---------- Form: tiêu đề, kích thước, KeyPreview để nhận phím tắt ----------
             _currentTitle = TitleText;
             this.Text = _currentTitle.Trim();
             this.Size = new Size(900, 620);
@@ -56,6 +65,7 @@ namespace WindowsAss.src.Onclass
             this.KeyPreview = true;
             this.BackColor = Color.FromArgb(30, 30, 30);
 
+            // ---------- Menu File: Open (Ctrl+O), Separator, Exit (Alt+F4) ----------
             _menuStrip = new MenuStrip();
             _menuStrip.BackColor = Color.FromArgb(45, 45, 48);
             _menuStrip.ForeColor = Color.White;
@@ -77,6 +87,7 @@ namespace WindowsAss.src.Onclass
             this.MainMenuStrip = _menuStrip;
             this.Controls.Add(_menuStrip);
 
+            // ---------- Panel điều khiển (dưới cùng): thanh tiến trình + nút ----------
             _controlPanel = new Panel
             {
                 Height = 90,
@@ -84,6 +95,7 @@ namespace WindowsAss.src.Onclass
                 BackColor = Color.FromArgb(45, 45, 48),
                 Padding = new Padding(8, 6, 8, 6)
             };
+            // Thanh tiến trình: Value 0–1000 = 0%–100% thời lượng; click/kéo → seek khi thả chuột
             var progressPanel = new Panel { Dock = DockStyle.Top, Height = 28, Padding = new Padding(0, 0, 0, 4) };
             _trackBar = new TrackBar
             {
@@ -95,7 +107,9 @@ namespace WindowsAss.src.Onclass
                 BackColor = Color.FromArgb(45, 45, 48),
                 ForeColor = Color.FromArgb(200, 200, 200)
             };
+              // Click vào thanh → nhảy nút + seek
             _trackBar.MouseDown += TrackBar_MouseDown;
+                // Kéo xong thả → seek + tắt _userSeeking
             _trackBar.MouseUp += TrackBar_MouseUp;
             _lblTime = new Label
             {
@@ -106,6 +120,7 @@ namespace WindowsAss.src.Onclass
             };
             progressPanel.Controls.Add(_trackBar);
             progressPanel.Controls.Add(_lblTime);
+            // Nút: Mở file, ◀ 5s, Play/Pause, 5s ▶
             var flow = new FlowLayoutPanel
             {
                 Dock = DockStyle.Bottom,
@@ -172,6 +187,7 @@ namespace WindowsAss.src.Onclass
             progressPanel.BringToFront();
             this.Controls.Add(_controlPanel);
 
+            // ---------- StatusStrip: đồng hồ "Hôm nay là ngày ... - Bây giờ là ..." (cập nhật 1s) ----------
             _statusStrip = new StatusStrip();
             _statusStrip.BackColor = Color.FromArgb(37, 37, 38);
             _statusStrip.ForeColor = Color.FromArgb(200, 200, 200);
@@ -184,6 +200,7 @@ namespace WindowsAss.src.Onclass
             _statusStrip.Items.Add(_statusLabel);
             this.Controls.Add(_statusStrip);
 
+            // ---------- AxWindowsMediaPlayer: phát media, Dock Fill, lắng nghe PlayStateChange ----------
             _mediaPlayer = new AxWindowsMediaPlayer();
             ((System.ComponentModel.ISupportInitialize)_mediaPlayer).BeginInit();
             _mediaPlayer.Dock = DockStyle.Fill;
@@ -193,15 +210,18 @@ namespace WindowsAss.src.Onclass
             ((System.ComponentModel.ISupportInitialize)_mediaPlayer).EndInit();
             this.Controls.Add(_mediaPlayer);
 
+            // ---------- Timer: đồng hồ 1s ----------
             _clockTimer = new System.Windows.Forms.Timer { Interval = 1000 };
             _clockTimer.Tick += ClockTimer_Tick;
             _clockTimer.Start();
             UpdateStatusClock();
 
+            // ---------- Timer: scroll tiêu đề form 200ms ----------
             _titleScrollTimer = new System.Windows.Forms.Timer { Interval = 200 };
             _titleScrollTimer.Tick += TitleScrollTimer_Tick;
             _titleScrollTimer.Start();
 
+            // ---------- Timer: đồng bộ thanh tiến trình với video 500ms ----------
             _progressTimer = new System.Windows.Forms.Timer { Interval = 500 };
             _progressTimer.Tick += ProgressTimer_Tick;
             _progressTimer.Start();
@@ -210,6 +230,7 @@ namespace WindowsAss.src.Onclass
             this.Load += Form_Load;
         }
 
+        /// <summary>Đổi số giây thành chuỗi "m:ss" (ví dụ 125 → "2:05").</summary>
         private static string FormatTime(double seconds)
         {
             if (double.IsNaN(seconds) || seconds < 0) return "0:00";
@@ -218,6 +239,7 @@ namespace WindowsAss.src.Onclass
             return $"{m}:{s:D2}";
         }
 
+        /// <summary>Cập nhật thanh tiến trình và nhãn thời gian từ WMP (mỗi 500ms). Không cập nhật khi _userSeeking.</summary>
         private void ProgressTimer_Tick(object? sender, EventArgs e)
         {
             if (_userSeeking || _mediaPlayer?.currentMedia == null) return;
@@ -243,6 +265,7 @@ namespace WindowsAss.src.Onclass
             }
         }
 
+        /// <summary>Click vào thanh tiến trình: tính Value từ e.X, nhảy nút tới đó và seek video.</summary>
         private void TrackBar_MouseDown(object? sender, MouseEventArgs e)
         {
             _userSeeking = true;
@@ -255,12 +278,14 @@ namespace WindowsAss.src.Onclass
             ApplySeekFromTrackBar();
         }
 
+        /// <summary>Thả chuột sau khi kéo: seek video theo Value hiện tại, tắt _userSeeking.</summary>
         private void TrackBar_MouseUp(object? sender, MouseEventArgs e)
         {
             ApplySeekFromTrackBar();
             _userSeeking = false;
         }
 
+        /// <summary>Đặt vị trí phát (currentPosition) theo Value thanh tiến trình (0–1000 = 0%–100% duration).</summary>
         private void ApplySeekFromTrackBar()
         {
             if (_mediaPlayer?.currentMedia == null) return;
@@ -277,6 +302,7 @@ namespace WindowsAss.src.Onclass
             catch { /* ignore */ }
         }
 
+        /// <summary>Form Load: thử đặt uiMode = "full" cho WMP (sau khi control sẵn sàng).</summary>
         private void Form_Load(object? sender, EventArgs e)
         {
             if (_mediaPlayer == null) return;
@@ -290,6 +316,7 @@ namespace WindowsAss.src.Onclass
             }));
         }
 
+        /// <summary>Phím tắt: Ctrl+O mở file, Space Play/Pause, ← lùi 5s, → tiến 5s.</summary>
         private void Form_KeyDown(object? sender, KeyEventArgs e)
         {
             if (_mediaPlayer == null) return;
@@ -321,6 +348,7 @@ namespace WindowsAss.src.Onclass
             }
         }
 
+        /// <summary>Tua tương đối: currentPosition += seconds (clamp 0..duration).</summary>
         private void SeekRelative(int seconds)
         {
             if (_mediaPlayer?.currentMedia == null) return;
@@ -337,6 +365,7 @@ namespace WindowsAss.src.Onclass
         private void BtnBack5_Click(object? sender, EventArgs e) => SeekRelative(-5);
         private void BtnForward5_Click(object? sender, EventArgs e) => SeekRelative(5);
 
+        /// <summary>WMP đổi trạng thái: cập nhật nút Play/Pause; nếu MediaEnded thì giữ frame cuối (KeepVideoOnScreen).</summary>
         private void MediaPlayer_PlayStateChange(object sender, _WMPOCXEvents_PlayStateChangeEvent e)
         {
             if (_btnPlayPause.IsDisposed) return;
@@ -353,6 +382,7 @@ namespace WindowsAss.src.Onclass
             catch { /* ignore */ }
         }
 
+        /// <summary>Khi video phát xong: pause và seek về gần cuối (frame cuối) để không xóa video khỏi giao diện.</summary>
         private void KeepVideoOnScreen()
         {
             if (_mediaPlayer?.currentMedia == null) return;
@@ -366,6 +396,7 @@ namespace WindowsAss.src.Onclass
             catch { /* ignore */ }
         }
 
+        /// <summary>Nút Play/Pause: đổi giữa play và pause, cập nhật Text ▶ / ❚❚.</summary>
         private void BtnPlayPause_Click(object? sender, EventArgs e)
         {
             if (_mediaPlayer == null) return;
@@ -389,6 +420,7 @@ namespace WindowsAss.src.Onclass
             }
         }
 
+        /// <summary>File → Open: OpenFileDialog (MP4/MPEG/AVI/WAV/MIDI), gán URL và play.</summary>
         private void MenuOpen_Click(object? sender, EventArgs e)
         {
             using var dlg = new OpenFileDialog
@@ -402,22 +434,26 @@ namespace WindowsAss.src.Onclass
             _btnPlayPause.Text = "❚❚";
         }
 
+        /// <summary>File → Exit: thoát toàn bộ ứng dụng.</summary>
         private void MenuExit_Click(object? sender, EventArgs e)
         {
             Application.Exit();
         }
 
+        /// <summary>Timer đồng hồ (1s): cập nhật StatusStrip.</summary>
         private void ClockTimer_Tick(object? sender, EventArgs e)
         {
             UpdateStatusClock();
         }
 
+        /// <summary>Hiển thị "Hôm nay là ngày dd/MM/yyyy - Bây giờ là HH:mm:ss".</summary>
         private void UpdateStatusClock()
         {
             var now = DateTime.Now;
-            _statusLabel.Text = $"Hôm nay là ngày {now:dd/MM/yyyy} - Bây giờ là {now:HH:mm:ss}";
+            _statusLabel.Text = $"{now:dd/MM/yyyy} - {now:HH:mm:ss}";
         }
 
+        /// <summary>Timer scroll tiêu đề (200ms): xoay chuỗi 1 ký tự → hiệu ứng chạy từ phải sang trái.</summary>
         private void TitleScrollTimer_Tick(object? sender, EventArgs e)
         {
             if (_currentTitle.Length == 0) return;
@@ -425,6 +461,7 @@ namespace WindowsAss.src.Onclass
             this.Text = _currentTitle;
         }
 
+        /// <summary>Đóng form: dừng và Dispose 3 Timer; gỡ event WMP, stop, URL = "" để giải phóng COM (tránh lỗi khi mở lại).</summary>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             _clockTimer?.Stop();
