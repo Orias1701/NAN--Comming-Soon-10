@@ -20,12 +20,12 @@ namespace WindowsAss.src.Onclass
     public class EmployeeForm : Form
     {
         // Khai báo các control
-        private Label lblTitle, lblHoTen, lblNgaySinh, lblDiaChi, lblDienThoai;
-        private TextBox txtHoTen, txtDiaChi, txtDienThoai;
-        private DateTimePicker dtpNgaySinh;
-        private Button btnThem, btnXoa, btnSua, btnThoat;
-        private ListView lsvNhanVien;
-        private GroupBox grpChiTiet, grpDanhSach;
+        private Label lblTitle = null!, lblHoTen = null!, lblNgaySinh = null!, lblDiaChi = null!, lblDienThoai = null!;
+        private TextBox txtHoTen = null!, txtDiaChi = null!, txtDienThoai = null!;
+        private DateTimePicker dtpNgaySinh = null!;
+        private Button btnThem = null!, btnXoa = null!, btnSua = null!, btnThoat = null!;
+        private ListView lsvNhanVien = null!;
+        private GroupBox grpChiTiet = null!, grpDanhSach = null!;
 
         public EmployeeForm()
         {

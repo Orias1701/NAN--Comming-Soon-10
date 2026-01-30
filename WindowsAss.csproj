@@ -10,6 +10,7 @@
     <AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

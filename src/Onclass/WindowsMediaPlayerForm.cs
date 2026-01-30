@@ -86,9 +86,8 @@ namespace WindowsAss.src.Onclass
                 BackColor = Color.FromArgb(45, 45, 48),
                 ForeColor = Color.FromArgb(200, 200, 200)
             };
-            _trackBar.Scroll += TrackBar_Scroll;
-            _trackBar.MouseDown += (s, _) => _userSeeking = true;
-            _trackBar.MouseUp += (s, _) => _userSeeking = false;
+            _trackBar.MouseDown += TrackBar_MouseDown;
+            _trackBar.MouseUp += TrackBar_MouseUp;
             _lblTime = new Label
             {
                 AutoSize = true,
@@ -235,7 +234,25 @@ namespace WindowsAss.src.Onclass
             }
         }
 
-        private void TrackBar_Scroll(object? sender, EventArgs e)
+        private void TrackBar_MouseDown(object? sender, MouseEventArgs e)
+        {
+            _userSeeking = true;
+            if (e.Button != MouseButtons.Left) return;
+            int w = _trackBar.ClientSize.Width;
+            if (w <= 0) return;
+            int value = (int)((e.X / (double)w) * (_trackBar.Maximum - _trackBar.Minimum) + _trackBar.Minimum);
+            value = Math.Clamp(value, _trackBar.Minimum, _trackBar.Maximum);
+            _trackBar.Value = value;
+            ApplySeekFromTrackBar();
+        }
+
+        private void TrackBar_MouseUp(object? sender, MouseEventArgs e)
+        {
+            ApplySeekFromTrackBar();
+            _userSeeking = false;
+        }
+
+        private void ApplySeekFromTrackBar()
         {
             if (_mediaPlayer?.currentMedia == null) return;
             try
