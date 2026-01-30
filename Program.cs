@@ -8,7 +8,7 @@ using System.Windows.Forms; // Thêm dòng này
 using WindowsAss.src.Onclass;
 using WindowsAss.src.Homework;
 using WindowsAss.src.Miniproject.UI;
-using WindowsAss.src.SV_Forms;
+using WindowsAss.src.Onclass.SV_Forms;
 
 namespace WindowsAss
 {

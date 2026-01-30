@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WindowsAss.src.SV_Forms
+namespace WindowsAss.src.Onclass.SV_Forms
 {
     /// <summary>Lớp mô tả Khoa.</summary>
     public class Khoa

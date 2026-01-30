@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace WindowsAss.src.SV_Forms
+namespace WindowsAss.src.Onclass.SV_Forms
 {
     /// <summary>Form con: Chọn Sinh viên, chọn Môn học, nhập Điểm số.</summary>
     public class frmNhapDiem : Form

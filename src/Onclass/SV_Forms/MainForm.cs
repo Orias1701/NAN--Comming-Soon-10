@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace WindowsAss.src.SV_Forms
+namespace WindowsAss.src.Onclass.SV_Forms
 {
     /// <summary>Điểm vào: chạy ứng dụng Quản lý sinh viên MDI từ menu chính.</summary>
     public static class SV_FormsRunner

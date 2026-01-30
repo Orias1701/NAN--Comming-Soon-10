@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace WindowsAss.src.SV_Forms
+namespace WindowsAss.src.Onclass.SV_Forms
 {
     /// <summary>Form con: Nhập Mã khoa, Tên khoa.</summary>
     public class frmKhoa : Form

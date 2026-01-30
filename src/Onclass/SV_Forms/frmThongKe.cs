@@ -2,19 +2,19 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace WindowsAss.src.SV_Forms
+namespace WindowsAss.src.Onclass.SV_Forms
 {
-    /// <summary>Form con placeholder: Tra cứu điểm (giữ chỗ).</summary>
-    public class frmXemDiem : Form
+    /// <summary>Form con placeholder: Thống kê SV theo khoa (giữ chỗ).</summary>
+    public class frmThongKe : Form
     {
-        public frmXemDiem()
+        public frmThongKe()
         {
-            this.Text = "Xem điểm";
+            this.Text = "Thống kê theo khoa";
             this.Size = new Size(500, 400);
             this.StartPosition = FormStartPosition.CenterScreen;
             var lbl = new Label
             {
-                Text = "Chức năng tra cứu điểm sẽ được bổ sung sau.",
+                Text = "Chức năng thống kê sinh viên theo khoa sẽ được bổ sung sau.",
                 AutoSize = true,
                 Location = new Point(40, 40),
                 Font = new Font("Segoe UI", 10)
