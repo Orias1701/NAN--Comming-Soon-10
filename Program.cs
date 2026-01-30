@@ -3,20 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms; // Thêm dòng này
 
 using WindowsAss.src.Onclass;
 using WindowsAss.src.Homework;
 using WindowsAss.src.Miniproject.UI;
 
 namespace WindowsAss
-{    class Program
+{
+    class Program
     {
+        [STAThread] 
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
             while (true)
             {
                 Console.WriteLine("\n========= CHON CHUONG TRINH DE CHAY =========");
@@ -27,6 +31,7 @@ namespace WindowsAss
                 Console.WriteLine("5. OOP Shapes (Tinh chu vi, dien tich)");
                 Console.WriteLine("6. Library Manager (Quan ly thu vien)");
                 Console.WriteLine("7. Quadratic Equation (Phuong trinh bac 2)");
+                Console.WriteLine("8. Quan Ly Sinh Vien (Windows Form)"); // <--- Thêm mới
                 Console.WriteLine("0. Thoat");
                 Console.WriteLine("=============================================");
                 Console.Write("Lua chon cua ban: ");
@@ -57,6 +62,10 @@ namespace WindowsAss
                     case "7":
                         QuadraticEquation.Run();
                         break;
+                    case "8":
+                        // Gọi hàm Run từ class StudentRunner vừa tạo
+                        StudentRunner.Run(); 
+                        break;
                     case "0":
                         Console.WriteLine("Da thoat chuong trinh chinh.");
                         return;
@@ -65,6 +74,7 @@ namespace WindowsAss
                         break;
                 }
                 
+                // Logic xử lý khi quay lại từ Form hoặc Console App khác
                 Console.WriteLine("\nNhan phim bat ky de quay lai menu chinh...");
                 Console.ReadKey();
                 Console.Clear();

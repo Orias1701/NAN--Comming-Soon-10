@@ -21,11 +21,11 @@ namespace WindowsAss
         private void InitializeComponent()
         {
             this.Size = new Size(400, 450);
-            this.Text = "QuadraticEquation";
+            this.Text = "Quadratic Equation";
             this.StartPosition = FormStartPosition.CenterScreen;
 
             lblTitle = new Label();
-            lblTitle.Text = "Giải PT bậc 2";
+            lblTitle.Text = "Giải Phương Trình bậc 2";
             lblTitle.Font = new Font("Arial", 16, FontStyle.Bold);
             lblTitle.AutoSize = true;
             lblTitle.Location = new Point(120, 20);
