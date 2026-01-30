@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,7 +31,9 @@ namespace WindowsAss
                 Console.WriteLine("5. OOP Shapes (Tinh chu vi, dien tich)");
                 Console.WriteLine("6. Library Manager (Quan ly thu vien)");
                 Console.WriteLine("7. Quadratic Equation (Phuong trinh bac 2)");
-                Console.WriteLine("8. Quan Ly Sinh Vien (Windows Form)"); // <--- Thêm mới
+                Console.WriteLine("8. Quan Ly Sinh Vien (Windows Form)");
+                Console.WriteLine("9. Quan Ly Nhan Vien (Windows Form)");
+                Console.WriteLine("10. Windows Media Player (Phat nhac/video)");
                 Console.WriteLine("0. Thoat");
                 Console.WriteLine("=============================================");
                 Console.Write("Lua chon cua ban: ");
@@ -63,8 +65,13 @@ namespace WindowsAss
                         QuadraticEquation.Run();
                         break;
                     case "8":
-                        // Gọi hàm Run từ class StudentRunner vừa tạo
                         StudentRunner.Run(); 
+                        break;
+                    case "9":
+                        EmployeeRunner.Run();
+                        break;
+                    case "10":
+                        WindowsMediaRunner.Run();
                         break;
                     case "0":
                         Console.WriteLine("Da thoat chuong trinh chinh.");
