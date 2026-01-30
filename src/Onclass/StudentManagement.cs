@@ -43,7 +43,7 @@ namespace WindowsAss.src.Onclass
             this.Text = "Quản lý sinh viên";
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            lblTieuDe = new Label { Text = "DANH SÁCH SINH VIÊN", Font = new Font("Arial", 16, FontStyle.Bold), AutoSize = true, Location = new Point(180, 20), ForeColor = Color.Blue };
+            lblTieuDe = new Label { Text = "DANH SÁCH SINH VIÊN", Font = new Font("Arial", 16, FontStyle.Bold), Location = new Point(0, 20), Size = new Size(600, 30), TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Teal };
             
             lblHoTen = new Label { Text = "Họ và tên:", Location = new Point(50, 70), AutoSize = true };
             txtHoTen = new TextBox { Location = new Point(120, 65), Width = 300 };
